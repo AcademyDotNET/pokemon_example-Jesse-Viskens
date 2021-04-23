@@ -50,21 +50,25 @@ namespace Pokemon
             }
             Random rnd = new Random();
             //pokemon generator
-            Pokemon specialPokemon = GeneratorPokemon(rnd,"test");
+            Pokemon specialPokemon = Pokemon.GeneratorPokemon(rnd,"test");
 
             //battle tester
-            int winner = Battle(pikachu, magikarp);
+            int winner = Pokemon.Battle(pikachu, magikarp);
 
             //alles samen
             AllesSamen(rnd);
+
+            Pokemon pokeDeel2 = new Pokemon() { Hp_Base = 40, Naam = "Pikachu" };
+
+            Pokemon.Info();
 
         }
 
         private static void AllesSamen(Random rnd)
         {
-            Pokemon pokemon1 = GeneratorPokemon(rnd, "Kinkysaurus");
-            Pokemon pokemon2 = GeneratorPokemon(rnd, "Charmander");
-            int result = Battle(pokemon1, pokemon2);
+            Pokemon pokemon1 = Pokemon.GeneratorPokemon(rnd, "Kinkysaurus");
+            Pokemon pokemon2 = Pokemon.GeneratorPokemon(rnd, "Charmander");
+            int result = Pokemon.Battle(pokemon1, pokemon2);
             int aantalLevelsGestegen = rnd.Next(1, 6);
 
             switch (result)
@@ -89,54 +93,6 @@ namespace Pokemon
                 default:
                     Console.WriteLine("I don't know how you got here. ");
                     break;
-            }
-        }
-
-        //Maak een methode met volgende signatuur: static Pokemon GeneratorPokemon(). 
-        //Plaats deze methode niet in je Pokémon-klasse, maar in Program.cs.
-        public static Pokemon GeneratorPokemon(Random rnd,string name)
-        {
-            Pokemon randomPokemon = new Pokemon();
-
-            randomPokemon.Hp_Base = rnd.Next(1, 251);
-            randomPokemon.Attack_Base = rnd.Next(1, 251);
-            randomPokemon.Defense_Base = rnd.Next(1, 251);
-            randomPokemon.SpecialAttack_Base = rnd.Next(1, 251);
-            randomPokemon.SpecialDefence_Base = rnd.Next(1, 251);
-            randomPokemon.Speed_Base = rnd.Next(1, 251);
-
-            return randomPokemon;
-        }
-        public static int Battle(Pokemon poke1, Pokemon poke2)
-        {
-            if (poke1 ==null && poke2 == null)
-            {
-                //draw
-                return 0;
-            }else if (poke1 == null && poke2 != null)
-            {
-                //poke2 wint
-                return 2;
-            }else if (poke1 != null && poke2 == null)
-            {
-                //poke1 wint
-                return 1;
-            }
-            else
-            {
-                //let them fight! i know, kinda boring but hey :)
-                int winner = poke1.Average_Full - poke2.Average_Full;
-                if(winner < 0)
-                {
-                    return 2;
-                }else if(winner > 0)
-                {
-                    return 1;
-                }
-                else
-                {
-                    return 0;
-                }
             }
         }
     }

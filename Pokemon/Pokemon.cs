@@ -6,6 +6,25 @@ namespace Pokemon
 {
     class Pokemon
     {
+        public Pokemon()
+        {
+            Hp_Base = 10;
+            Attack_Base = 10;
+            Defense_Base = 10;
+            SpecialAttack_Base = 10;
+            SpecialDefence_Base = 10;
+            speed_Base = 10;
+        }
+        public Pokemon(int hp, int att, int def, int spAtt, int spDef, int spd)
+        {
+            Hp_Base = hp;
+            Attack_Base = att;
+            Defense_Base = def;
+            specialAttack_Base = spAtt;
+            specialDefense_Base = spDef;
+            speed_Base = spd;
+        }
+
         private int hp_Base, attack_Base, defense_Base, specialAttack_Base, specialDefense_Base, speed_Base = 0;
         private int level = 1;
         //full props
@@ -60,6 +79,14 @@ namespace Pokemon
         public string Naam { get; set; }
         public int Nummer { get; set; }
         public string Type { get; set; }
+
+        //deel2
+        public static int AmountOfTimesIncreased { get; private set; }
+        public static int AmountOfBattles { get; private set; }
+        public static int AmountOfDraws { get; set; }
+        public static int AmountOfRandomPokemonCreated { get; set; }
+        public static bool NoLevelingAllowed { get; set; } = false;
+
         //Statistics
         public double Average
         {
@@ -114,7 +141,16 @@ namespace Pokemon
         //methods
         public void VerhoogLevel()
         {
-            Level++;
+            if(NoLevelingAllowed == true)
+            {
+                AmountOfTimesIncreased++;
+                Level++;
+            }
+            else
+            {
+                Console.WriteLine("This pokemon cannot level right now!");
+            }
+
         }
 
         //Part 2: the poketester
@@ -136,6 +172,70 @@ namespace Pokemon
                 $"\t* Special Defence = {SpecialDefense_Full}\n" +
                 $"\t* Speed = {Speed_Full}\n"
                 );
+        }
+        public static Pokemon GeneratorPokemon(Random rnd, string name)
+        {
+            AmountOfRandomPokemonCreated++;
+            Pokemon randomPokemon = new Pokemon();
+
+            randomPokemon.Hp_Base = rnd.Next(1, 251);
+            randomPokemon.Attack_Base = rnd.Next(1, 251);
+            randomPokemon.Defense_Base = rnd.Next(1, 251);
+            randomPokemon.SpecialAttack_Base = rnd.Next(1, 251);
+            randomPokemon.SpecialDefence_Base = rnd.Next(1, 251);
+            randomPokemon.Speed_Base = rnd.Next(1, 251);
+
+            return randomPokemon;
+        }
+        //Maak een methode met volgende signatuur: static Pokemon GeneratorPokemon(). 
+        //Plaats deze methode niet in je Pokémon-klasse, maar in Program.cs.
+        public static int Battle(Pokemon poke1, Pokemon poke2)
+        {
+            if (poke1 == null && poke2 == null)
+            {
+                //draw
+                AmountOfDraws++;
+                return 0;
+            }
+            else if (poke1 == null && poke2 != null)
+            {
+                //poke2 wint
+                return 2;
+            }
+            else if (poke1 != null && poke2 == null)
+            {
+                //poke1 wint
+                return 1;
+            }
+            else
+            {
+                //let them fight! i know, kinda boring but hey :)
+                AmountOfBattles++;
+                int winner = poke1.Average_Full - poke2.Average_Full;
+                if (winner < 0)
+                {
+                    return 2;
+                }
+                else if (winner > 0)
+                {
+                    return 1;
+                }
+                else
+                {
+                    AmountOfDraws++;
+                    return 0;
+                }
+            }
+        }
+
+        public static void Info()
+        {
+            Console.WriteLine(
+                $"Extra Information: \n" +
+                $"\t Aantal keer verhoogd: {AmountOfTimesIncreased}\n" +
+                $"\t Aantal keer gevochten: {AmountOfBattles}\n" +
+                $"\t Aantal keer gelijk: {AmountOfDraws}\n" +
+                $"\t Aantal keer random aangemaakt: {AmountOfRandomPokemonCreated}\n");
         }
     }
 }
